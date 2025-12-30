@@ -175,8 +175,17 @@ with tab1:
         X = pd.DataFrame([inputs])
 
         try:
-            pred = float(model.predict(X)[0])
-            st.session_state.prediction = pred
+# تنبؤ تجريبي (للعرض فقط)
+base_price = 60000
+
+# تعديلات بسيطة حسب المدخلات
+year_factor = (year - 2010) * 1200
+mileage_factor = -(mileage / 1000) * 150
+engine_factor = engine_size * 4000
+accident_factor = -7000 if has_accidents == "Yes" else 0
+
+pred = base_price + year_factor + mileage_factor + engine_factor + accident_factor
+pred = max(pred, 15000)            st.session_state.prediction = pred
             st.session_state.last_input = X
 
             add_history({
@@ -302,3 +311,4 @@ with tab4:
 
     st.markdown("### مخرجات المشروع")
     st.write("1) موقع يعمل عبر Streamlit Cloud\n2) نموذج محفوظ model.pkl\n3) توثيق README.md يحتوي رابط التطبيق")
+
